@@ -1,581 +1,306 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta name="theme-color" content="#147a43">
+<meta name="description" content="Tabù Italiano: gioco di conversazione in italiano con 2.200 carte divise per argomento.">
 <title>Tabù Italiano</title>
 
 <style>
-
-*{
+:root{
+    --green:#147a43;
+    --green-dark:#0d5e33;
+    --red:#c83232;
+    --red-dark:#9f2525;
+    --ink:#20252b;
+    --muted:#66707a;
+    --line:#e5e7eb;
+    --surface:#ffffff;
+    --soft:#f6f7f6;
+    --cream:#fbfaf6;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    color:var(--ink);
+    background:var(--cream);
+    min-height:100vh;
+}
+body::before{
+    content:"";
+    display:block;
+    height:7px;
+    background:linear-gradient(90deg,var(--green) 0 33.33%,#fff 33.33% 66.66%,var(--red) 66.66%);
+    border-bottom:1px solid #e8e8e8;
+}
+.container{
+    width:min(760px,100%);
+    margin:0 auto;
+    padding:16px 18px 12px;
+}
+header{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:16px;
+    padding:4px 0 12px;
+}
+.brand h1{
+    margin:0;
+    color:var(--green-dark);
+    font-size:clamp(26px,4.5vw,38px);
+    line-height:1;
+    letter-spacing:.03em;
+}
+.brand p{
+    margin:6px 0 0;
+    color:var(--muted);
+    font-size:13px;
+}
+.version{
+    color:var(--muted);
+    font-size:12px;
+    white-space:nowrap;
+}
+.settings{
+    display:grid;
+    grid-template-columns:minmax(0,1.65fr) minmax(120px,.7fr) auto;
+    gap:8px;
+    padding:10px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+}
+select,button{
+    font:inherit;
+}
+select{
+    width:100%;
+    min-width:0;
+    height:42px;
+    border:1px solid #cfd4d8;
+    border-radius:10px;
+    background:#fff;
+    color:var(--ink);
+    padding:0 34px 0 11px;
+}
+button{
+    border:0;
+    border-radius:10px;
+    cursor:pointer;
+    min-height:42px;
+    font-weight:700;
+    transition:transform .08s ease,filter .15s ease,opacity .15s ease;
+}
+button:active:not(:disabled){transform:translateY(1px)}
+button:disabled{opacity:.38;cursor:not-allowed}
+.startBtn{
+    padding:0 16px;
+    background:var(--green);
+    color:white;
+    white-space:nowrap;
+}
+.startBtn:hover:not(:disabled){filter:brightness(.94)}
+.statusbar{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+    margin:9px 0 0;
+}
+.stat{
+    min-width:0;
+    padding:8px 6px;
+    text-align:center;
+    border:1px solid var(--line);
+    border-radius:11px;
+    background:var(--surface);
+}
+.stat .value{
+    font-size:20px;
+    line-height:1.05;
+    font-weight:800;
+    color:var(--ink);
+}
+.stat .label{
+    margin-top:3px;
+    color:var(--muted);
+    font-size:11px;
+    white-space:nowrap;
+}
+.gameMeta{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin:10px 1px 6px;
+}
+.categoryBadge{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    color:var(--green-dark);
+    background:#edf6f0;
+    border:1px solid #d5e9db;
+    border-radius:999px;
+    padding:5px 10px;
+    font-size:12px;
+    font-weight:700;
+}
+.roundText{
+    color:var(--muted);
+    font-size:12px;
+    white-space:nowrap;
+}
+.card{
+    background:var(--surface);
+    border:2px solid var(--green);
+    border-radius:16px;
+    padding:18px 20px 16px;
+}
+.word{
+    text-align:center;
+    font-size:clamp(31px,6vw,47px);
+    line-height:1.05;
+    font-weight:850;
+    color:var(--green-dark);
+    margin:1px 0 14px;
+    overflow-wrap:anywhere;
+}
+.tabooList{
+    list-style:none;
     margin:0;
     padding:0;
-    box-sizing:border-box;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:6px;
 }
-
-body{
-
-    font-family:Arial, Helvetica, sans-serif;
-
-    background:linear-gradient(
-        180deg,
-        #0b8f43,
-        white 45%,
-        #d62828
-    );
-
-    min-height:100vh;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    padding:30px;
-
-}
-
-.container{
-
-    width:100%;
-    max-width:900px;
-
-    background:white;
-
-    border-radius:18px;
-
-    box-shadow:0 20px 40px rgba(0,0,0,.25);
-
-    overflow:hidden;
-
-}
-
-header{
-
-    background:#0b8f43;
-
-    color:white;
-
-    text-align:center;
-
-    padding:25px;
-
-}
-
-header h1{
-
-    font-size:42px;
-
-    letter-spacing:2px;
-
-    animation:pulse 2.5s infinite;
-
-}
-
-header p{
-
-    margin-top:10px;
-
-    opacity:.9;
-
-}
-
-@keyframes pulse{
-
-    0%{transform:scale(1);}
-    50%{transform:scale(1.05);}
-    100%{transform:scale(1);}
-
-}
-
-.settings{
-
-    display:flex;
-
-    justify-content:center;
-
-    gap:20px;
-
-    flex-wrap:wrap;
-
-    padding:20px;
-
-    background:#f6f6f6;
-
-}
-
-.settings select,
-.settings button{
-
-    padding:12px 18px;
-
-    font-size:16px;
-
-    border-radius:10px;
-
-    border:none;
-
-}
-
-.settings select{
-
-    border:2px solid #0b8f43;
-}
-
-.startBtn{
-
-    background:#d62828;
-
-    color:white;
-
-    cursor:pointer;
-
-    transition:.3s;
-
-}
-
-.startBtn:hover{
-
-    background:#b51e1e;
-
-}
-
-
-.scoreboard{
-
-    display:flex;
-
-    justify-content:space-around;
-
-    text-align:center;
-
-    padding:20px;
-
-    background:white;
-
-    border-top:1px solid #ddd;
-
-    border-bottom:1px solid #ddd;
-
-}
-
-.score{
-
-    font-size:22px;
-
-    font-weight:bold;
-
-}
-
-.gameArea{
-
-    padding:35px;
-
-    text-align:center;
-
-}
-
-.timer{
-
-    font-size:48px;
-
-    color:#d62828;
-
-    margin-bottom:20px;
-
-    font-weight:bold;
-
-}
-
-.card{
-
-    width:100%;
-
-    max-width:550px;
-
-    margin:auto;
-
-    background:#fff;
-
-    border-radius:18px;
-
-    border:5px solid #0b8f43;
-
-    padding:30px;
-
-    box-shadow:0 8px 20px rgba(0,0,0,.15);
-
-}
-
-.word{
-
-    font-size:42px;
-
-    color:#0b8f43;
-
-    margin-bottom:25px;
-
-}
-
-.tabooList{
-
-    list-style:none;
-
-}
-
 .tabooList li{
-
-    padding:10px;
-
-    margin:10px;
-
-    background:#f2f2f2;
-
-    border-left:6px solid #d62828;
-
-    border-radius:8px;
-
-    font-size:20px;
-
-}
-
-.controls{
-
-    margin-top:35px;
-
-}
-
-.controls button{
-
-    padding:15px 28px;
-
-    margin:10px;
-
-    border:none;
-
-    border-radius:10px;
-
-    color:white;
-
-    cursor:pointer;
-
-    font-size:18px;
-
-    transition:.25s;
-
-}
-
-.correct{
-
-    background:#0b8f43;
-
-}
-
-.correct:hover{
-
-    transform:scale(1.05);
-
-}
-
-.skip{
-
-    background:#d62828;
-
-}
-
-.skip:hover{
-
-    transform:scale(1.05);
-
-}
-
-.restart{
-
-    background:#444;
-
-}
-
-.restart:hover{
-
-    transform:scale(1.05);
-
-}
-
-footer{
-
-    background:#0b8f43;
-
-    color:white;
-
     text-align:center;
-
-    padding:18px;
-
-    font-size:14px;
-
+    padding:7px 10px;
+    background:var(--soft);
+    border-left:4px solid var(--red);
+    border-radius:8px;
+    font-size:17px;
+    line-height:1.15;
 }
-
-@media(max-width:700px){
-
-header h1{
-
-    font-size:30px;
-
+.controls{
+    display:grid;
+    grid-template-columns:1fr 1fr auto;
+    gap:8px;
+    margin-top:9px;
 }
-
-.word{
-
-    font-size:32px;
-
+.correct,.skip,.restart{color:#fff;padding:0 16px}
+.correct{background:var(--green)}
+.skip{background:var(--red)}
+.restart{background:#59616a;white-space:nowrap}
+.correct:hover:not(:disabled),.skip:hover:not(:disabled),.restart:hover:not(:disabled){filter:brightness(.94)}
+.result{
+    display:none;
+    margin-top:10px;
+    padding:12px 14px;
+    background:#f0f7f2;
+    border:1px solid #d8eadd;
+    border-radius:12px;
+    text-align:center;
 }
-
-.timer{
-
-    font-size:40px;
-
+.result.show{display:block}
+.result strong{color:var(--green-dark)}
+footer{
+    text-align:center;
+    padding:14px 0 2px;
+    color:var(--muted);
+    font-size:12px;
 }
-
-.controls button{
-
-    width:90%;
-
+footer .built{margin-top:3px;color:var(--ink);font-weight:700}
+@media(max-width:620px){
+    .container{padding:12px 12px 10px}
+    header{align-items:flex-start}
+    .brand p{display:none}
+    .version{margin-top:4px}
+    .settings{
+        grid-template-columns:1fr 112px;
+    }
+    .startBtn{grid-column:1/-1}
+    .statusbar{gap:5px}
+    .stat{padding:7px 3px}
+    .stat .value{font-size:18px}
+    .stat .label{font-size:10px}
+    .card{padding:15px 13px 13px}
+    .word{margin-bottom:11px}
+    .tabooList li{font-size:16px;padding:6px 8px}
+    .controls{grid-template-columns:1fr 1fr}
+    .restart{grid-column:1/-1;min-height:38px}
 }
-
-.scoreboard{
-
-    flex-direction:column;
-    gap:15px;
-
+@media(max-width:390px){
+    .settings{grid-template-columns:1fr}
+    .startBtn{grid-column:auto}
+    .statusbar{grid-template-columns:repeat(2,1fr)}
+    .gameMeta{align-items:flex-start}
 }
-
-}
-
 </style>
 
 </head>
 
 <body>
-
 <div class="container">
-
-<header>
-
-<h1>🇮🇹 TABÙ ITALIANO 🇮🇹</h1>
-
-<p>Scegli un argomento e pratica l'italiano senza dire le parole proibite.</p>
-
-</header>
-
-<div class="settings">
-
-<select id="categorySelect" aria-label="Scegli un argomento di gioco">
-
-<option value="All">Tutti gli argomenti</option>
-
-<option value="General">Generale</option>
-
-<option value="ItalianCulture">Cultura italiana</option>
-
-<option value="ItalianFood">Cucina italiana</option>
-
-<option value="ItalianTravel">Viaggi in Italia</option>
-
-<option value="DailyLife">Vita quotidiana</option>
-
-<option value="WorkLife">Lavoro e vita professionale</option>
-
-<option value="Sicily">Sicilia e Italia meridionale</option>
-
-<option value="B1Conversation">Conversazione B1</option>
-
-<option value="Hobbies">Passatempi</option>
-
-<option value="Verbs">Verbi ed espressioni</option>
-
-<option value="Idioms">Modi di dire ed espressioni colloquiali</option>
-
-</select>
-
-<select id="timeLimit">
-
-<option value="60">60 secondi</option>
-
-<option value="90">90 secondi</option>
-
-<option value="120">120 secondi</option>
-
-</select>
-
-<button class="startBtn" id="startGame">
-
-▶ Avvia partita
-
-</button>
-
-
-</div>
-
-<div class="scoreboard">
-
-<div>
-
-<div class="score" id="score">0</div>
-
-<div>Corrette</div>
-
-</div>
-
-<div>
-
-<div class="score" id="skips">0</div>
-
-<div>Saltate</div>
-
-</div>
-
-<div>
-
-<div class="score" id="remaining">--</div>
-
-<div>Carte rimaste</div>
-
-</div>
-
-</div>
-
-<div class="gameArea">
-
-<div class="timer" id="timer">
-
-60
-
-</div>
-
-<div class="card">
-
-<div class="word" id="word">
-
-Premi Start
-
-</div>
-
-<ul class="tabooList" id="tabooList">
-
-<li>Le parole proibite appariranno qui</li>
-
-<li>Parla solo in italiano</li>
-
-<li>Non usare le parole sotto</li>
-
-<li>Fai indovinare la parola</li>
-
-<li>Divertiti!</li>
-
-</ul>
-
-</div>
-
-<div class="controls">
-
-<button class="correct" id="correctBtn">
-
-✓ Corretto
-
-</button>
-
-<button class="skip" id="skipBtn">
-
-⏭ Salta
-
-</button>
-
-<button class="restart" id="restartBtn">
-
-↺ Nuova partita
-
-</button>
-
-</div>
-
-</div>
-
-<footer>
-
-Tabù Italiano • Impara l'italiano conversando • Versione 1.3<br>
-Costruito da Jesse
-
-</footer>
-
+    <header>
+        <div class="brand">
+            <h1>🇮🇹 TABÙ ITALIANO</h1>
+            <p>Descrivi la parola senza usare le cinque parole proibite.</p>
+        </div>
+        <div class="version">Versione 2.0</div>
+    </header>
+
+    <div class="settings">
+        <select id="categorySelect" aria-label="Scegli un argomento"></select>
+        <select id="timeLimit" aria-label="Scegli la durata">
+            <option value="60">60 secondi</option>
+            <option value="90">90 secondi</option>
+            <option value="120">120 secondi</option>
+        </select>
+        <button class="startBtn" id="startGame">▶ Avvia partita</button>
+    </div>
+
+    <div class="statusbar">
+        <div class="stat"><div class="value" id="score">0</div><div class="label">Corrette</div></div>
+        <div class="stat"><div class="value" id="skips">0</div><div class="label">Saltate</div></div>
+        <div class="stat"><div class="value" id="remaining">--</div><div class="label">Carte rimaste</div></div>
+        <div class="stat"><div class="value" id="timer">60</div><div class="label">Secondi</div></div>
+    </div>
+
+    <div class="gameMeta">
+        <div class="categoryBadge" id="categoryBadge">Scegli un argomento</div>
+        <div class="roundText" id="roundText">Pronto?</div>
+    </div>
+
+    <main class="card" aria-live="polite">
+        <div class="word" id="word">Pronto?</div>
+        <ul class="tabooList" id="tabooList">
+            <li>Scegli un argomento</li>
+            <li>Scegli la durata</li>
+            <li>Premi «Avvia partita»</li>
+            <li>Parla solo in italiano</li>
+            <li>Fai indovinare la parola</li>
+        </ul>
+    </main>
+
+    <div class="controls">
+        <button class="correct" id="correctBtn" disabled>✓ Corretto</button>
+        <button class="skip" id="skipBtn" disabled>⏭ Salta</button>
+        <button class="restart" id="restartBtn">↺ Nuova partita</button>
+    </div>
+
+    <div class="result" id="resultBox"></div>
+
+    <footer>
+        Tabù Italiano • Impara l'italiano conversando
+        <div class="built">Costruito da Jesse</div>
+    </footer>
 </div>
 
 <script>
-
-/************************************************
- ITALIAN TABOO GAME ENGINE
- PART 2A
- Core Game Logic + Cards
-************************************************/
-
-
-// ==============================
-// DOM ELEMENTS
-// ==============================
-
-const scoreDisplay = document.getElementById("score");
-const skipsDisplay = document.getElementById("skips");
-const remainingDisplay = document.getElementById("remaining");
-
-const timerDisplay = document.getElementById("timer");
-
-const wordDisplay = document.getElementById("word");
-
-const tabooDisplay = document.getElementById("tabooList");
-
-const categorySelect = document.getElementById("categorySelect");
-
-const timeSelect = document.getElementById("timeLimit");
-
-const startButton = document.getElementById("startGame");
-
-const correctButton = document.getElementById("correctBtn");
-
-const skipButton = document.getElementById("skipBtn");
-
-const restartButton = document.getElementById("restartBtn");
-
-
-
-
-// ==============================
-// GAME VARIABLES
-// ==============================
-
-
-let gameActive = false;
-
-let isPaused = false;
-
-let currentCard = null;
-
-let cardsRemaining = [];
-
-let score = 0;
-
-let skips = 0;
-
-let timeRemaining = 60;
-
-let timerInterval = null;
-
-
-
-
-// ==============================
-// CARD DATABASE
-// ==============================
-
-
 const cards = {
 
 
@@ -11245,547 +10970,344 @@ taboo:[
 };
 
 
+const supplementalTargets = {"General":["Sveglia","Calendario","Agenda","Appuntamento","Ritardo","Orario","Pausa","Weekend","Festa","Compleanno","Regalo","Candela","Palloncino","Torta","Invito","Sorpresa","Auguri","Fotografia","Album","Ricordo","Portafoglio","Moneta","Banconota","Carta di credito","Scontrino","Prezzo","Sconto","Offerta","Pagamento","Resti","Ascensore","Scale","Corridoio","Balcone","Garage","Cantina","Tetto","Muro","Pavimento","Soffitto","Frigorifero","Forno","Lavastoviglie","Lavatrice","Aspirapolvere","Ferro da stiro","Ventilatore","Lampada","Presa","Interruttore","Asciugamano","Sapone","Shampoo","Spazzolino","Dentifricio","Pettine","Specchio","Doccia","Vasca","Rubinetto","Autobus","Metropolitana","Taxi","Semaforo","Incrocio","Parcheggio","Traffico","Marciapiede","Rotonda","Benzina","Ufficio postale","Francobollo","Busta","Pacco","Lettera","Indirizzo","Postino","Consegna","Firma","Cassetta postale","Farmacia","Ricetta","Medicina","Febbre","Tosse","Raffreddore","Cerotto","Termometro","Dolore","Riposo","Mercato","Bancarella","Venditore","Fruttivendolo","Panetteria","Macelleria","Pescheria","Edicola","Libreria","Fioraio","Cinema","Teatro","Museo","Concerto","Biglietteria","Palcoscenico","Attore","Pubblico","Spettacolo","Applauso","Computer","Tastiera","Mouse","Password","Internet","Sito web","Email","Applicazione","Batteria","Caricatore","Quartiere","Piazza","Fontana","Chiesa","Municipio","Biblioteca","Stadio","Palestra","Piscina","Giardino pubblico","Primavera","Autunno","Temporale","Vento","Nebbia","Ghiaccio","Arcobaleno","Fulmine","Tuono","Ombra","Sorriso","Risata","Pianto","Paura","Rabbia","Gioia","Noia","Speranza","Sogno","Fortuna","Vicino di casa","Amico","Collega","Ospite","Cliente","Coppia","Bambino","Ragazzo","Adulto","Anziano"],"ItalianCulture":["Rinascimento","Barocco","Neoclassicismo","Futurismo","Risorgimento","Umanesimo","Repubblica italiana","Costituzione","Tricolore","Inno di Mameli","Dante Alighieri","Francesco Petrarca","Giovanni Boccaccio","Alessandro Manzoni","Giacomo Leopardi","Italo Calvino","Umberto Eco","Luigi Pirandello","Dario Fo","Elsa Morante","Leonardo da Vinci","Michelangelo","Raffaello","Botticelli","Caravaggio","Tiziano","Donatello","Bernini","Canova","Modigliani","Giuseppe Verdi","Giacomo Puccini","Antonio Vivaldi","Gioachino Rossini","Luciano Pavarotti","Ennio Morricone","Mina","Lucio Dalla","Fabrizio De André","Domenico Modugno","Federico Fellini","Roberto Benigni","Vittorio De Sica","Sophia Loren","Marcello Mastroianni","Anna Magnani","Nanni Moretti","Paolo Sorrentino","Cinecittà","Neorealismo","Commedia dell'arte","Arlecchino","Pulcinella","Pinocchio","Carnevale di Venezia","Palio di Siena","Festa della Repubblica","Ferragosto","Befana","Presepe","Opera lirica","Teatro alla Scala","Arena di Verona","Festival di Sanremo","Biennale di Venezia","David di Donatello","Settimana della moda","Salone del Mobile","Vinitaly","Mille Miglia","Vespa","Fiat 500","Ferrari","Lamborghini","Maserati","Ducati","Alfa Romeo","Made in Italy","Design italiano","Alta moda","Gucci","Prada","Armani","Valentino","Dolce e Gabbana","Versace","Bottega Veneta","Ferragamo","Fendi","Max Mara","Serie A","Nazionale italiana","Azzurri","Scudetto","Coppa Italia","Derby","Juventus","Milan","Inter","Roma calcio","Giro d'Italia","Monza","Valentino Rossi","Alberto Tomba","Federica Pellegrini","Jannik Sinner","Sofia Goggia","Pallavolo italiana","Rugby italiano","Bocce","Piazza italiana","Campanile","Borgo","Centro storico","Portico","Loggia","Duomo","Basilica","Affresco","Mosaico","Aperitivo","Passeggiata serale","Dolce vita","Bella figura","Famiglia allargata","Pranzo della domenica","Bar di quartiere","Mercato rionale","Sagra","Pro loco","Dialetto","Accento regionale","Italiano standard","Gestualità italiana","Campanilismo","Artigianato","Ceramica","Vetro di Murano","Merletto","Liuteria","Università di Bologna","Accademia della Crusca","Treccani","RAI","Carosello","Corriere della Sera","La Gazzetta dello Sport","Topolino","Settimana enigmistica","Festival letterario"],"ItalianFood":["Spaghetti","Penne","Rigatoni","Fusilli","Tagliatelle","Pappardelle","Orecchiette","Bucatini","Linguine","Gnocchi","Ravioli","Tortellini","Lasagne","Cannelloni","Risotto","Polenta","Minestrone","Ribollita","Pasta e fagioli","Pasta alla norma","Carbonara","Amatriciana","Cacio e pepe","Pesto genovese","Ragù bolognese","Arrabbiata","Puttanesca","Aglio olio e peperoncino","Pasta al forno","Pasta con le vongole","Margherita","Marinara","Calzone","Focaccia","Piadina","Panzerotto","Crescentina","Farinata","Schiacciata","Bruschetta","Parmigiano Reggiano","Pecorino","Mozzarella di bufala","Burrata","Gorgonzola","Ricotta","Taleggio","Asiago","Provolone","Mascarpone","Prosciutto di Parma","Mortadella","Salame","Bresaola","Speck","Pancetta","Guanciale","Capocollo","Soppressata","Porchetta","Arancino","Supplì","Olive ascolane","Frittata","Polpette","Parmigiana di melanzane","Vitello tonnato","Saltimbocca","Ossobuco","Cotoletta alla milanese","Bistecca alla fiorentina","Brasato","Bollito misto","Cacciucco","Fritto misto","Baccalà","Polpo","Cozze","Vongole","Acciughe","Tiramisù","Cannolo","Cassata","Panna cotta","Zabaglione","Babà","Sfogliatella","Panettone","Pandoro","Colomba","Biscotti","Cantucci","Amaretti","Baci di dama","Zeppole","Chiacchiere","Struffoli","Granita","Semifreddo","Torrone","Espresso","Cappuccino","Macchiato","Caffè corretto","Moka","Aperol Spritz","Negroni","Prosecco","Limoncello","Amaro","Olio extravergine","Aceto balsamico","Basilico","Rosmarino","Salvia","Origano","Peperoncino","Aglio","Cipolla","Prezzemolo","Pomodoro San Marzano","Melanzana","Zucchina","Carciofo","Radicchio","Finocchio","Rucola","Porcino","Tartufo","Cappero","Limone","Arancia rossa","Fico","Uva","Oliva","Castagna","Nocciola","Pistacchio","Mandorla","Pinolo","Trattoria","Osteria","Pizzeria","Gelateria","Pasticceria","Enoteca","Agriturismo","Menù del giorno","Coperto","Antipasto","Primo piatto","Secondo piatto","Contorno","Dolce","Digestivo","Apericena","Cena della vigilia","Pranzo di Pasqua","Sagra gastronomica","Ricetta della nonna"],"ItalianTravel":["Roma","Firenze","Venezia","Milano","Napoli","Torino","Bologna","Genova","Verona","Pisa","Siena","Lucca","Perugia","Assisi","Orvieto","Ravenna","Ferrara","Mantova","Parma","Modena","Bari","Lecce","Matera","Alberobello","Polignano a Mare","Ostuni","Monopoli","Trani","Gallipoli","Otranto","Palermo","Catania","Siracusa","Taormina","Cefalù","Agrigento","Trapani","Erice","Noto","Ragusa","Tropea","Scilla","Reggio Calabria","Maratea","Amalfi","Positano","Ravello","Sorrento","Capri","Ischia","Cinque Terre","Portofino","Sanremo","Camogli","Lago di Como","Lago di Garda","Lago Maggiore","Dolomiti","Alpi","Appennini","Colosseo","Foro Romano","Pantheon","Fontana di Trevi","Piazza Navona","Vaticano","Uffizi","Ponte Vecchio","Torre di Pisa","Arena di Verona","Canal Grande","Piazza San Marco","Pompei","Valle dei Templi","Etna","Vesuvio","Trulli","Sassi di Matera","Costiera Amalfitana","Grotte di Frasassi","Stazione ferroviaria","Treno ad alta velocità","Regionale","Biglietto elettronico","Binario","Coincidenza","Ritardo ferroviario","Convalida","Prenotazione","Posto finestrino","Aeroporto","Carta d'imbarco","Controllo sicurezza","Gate","Bagaglio a mano","Valigia","Passaporto","Volo diretto","Scalo","Noleggio auto","Autostrada","Casello","Pedaggio","Area di servizio","Strada statale","Rotatoria","Parcheggio a pagamento","ZTL","Traghetto","Aliscafo","Hotel","Bed and breakfast","Appartamento vacanze","Campeggio","Ostello","Reception","Check-in","Check-out","Camera doppia","Colazione inclusa","Mappa","Guida turistica","Itinerario","Escursione","Visita guidata","Museo","Monumento","Belvedere","Centro storico","Souvenir","Spiaggia libera","Stabilimento balneare","Ombrellone","Lettino","Lungomare","Porto turistico","Sentiero","Rifugio","Funivia","Pista ciclabile","Alta stagione","Bassa stagione","Turista","Viaggiatore","Prenotare","Partire","Arrivare","Perdersi","Chiedere indicazioni","Fare una foto","Arezzo","Urbino","Trieste","Bergamo","Padova","Vicenza","Treviso","Merano","Aosta","Cortina d'Ampezzo","La Spezia","Livorno","Ancona","Pesaro","Viterbo","Spoleto","Gubbio","Volterra","San Gimignano","Montefalco"],"DailyLife":["Alzarsi","Fare il letto","Lavarsi","Vestirsi","Pettinarsi","Fare colazione","Uscire di casa","Andare al lavoro","Tornare a casa","Andare a dormire","Fare la doccia","Lavarsi i denti","Radersi","Truccarsi","Asciugarsi","Mettere il profumo","Cambiare vestiti","Preparare lo zaino","Controllare il telefono","Spegnere la sveglia","Fare la spesa","Scrivere la lista","Prendere il carrello","Pesare la frutta","Fare la fila","Pagare alla cassa","Usare un coupon","Portare le borse","Mettere via la spesa","Controllare lo scontrino","Cucinare","Tagliare","Mescolare","Bollire","Friggere","Cuocere al forno","Apparecchiare","Sparecchiare","Lavare i piatti","Conservare gli avanzi","Pulire","Spolverare","Passare l'aspirapolvere","Lavare il pavimento","Fare il bucato","Stendere i panni","Piegare i vestiti","Stirare","Buttare la spazzatura","Riciclare","Fare benzina","Guidare","Parcheggiare","Prendere l'autobus","Aspettare il treno","Attraversare la strada","Andare in bicicletta","Camminare","Fare traffico","Trovare parcheggio","Mandare un messaggio","Fare una telefonata","Rispondere","Lasciare un messaggio","Controllare l'email","Fare una videochiamata","Caricare il telefono","Usare il computer","Navigare su internet","Guardare i social","Lavorare da casa","Entrare in ufficio","Fare una riunione","Prendere appunti","Fare una pausa","Pranzare","Finire il turno","Timbrare","Organizzare la scrivania","Stampare un documento","Fare esercizio","Andare in palestra","Correre","Fare una passeggiata","Portare fuori il cane","Giocare con i bambini","Leggere","Guardare la TV","Ascoltare musica","Riposarsi","Prenotare una visita","Andare dal medico","Prendere una medicina","Misurare la febbre","Comprare un farmaco","Andare dal dentista","Fare un controllo","Mettere un cerotto","Dormire bene","Bere acqua","Pagare una bolletta","Controllare il conto","Prelevare contanti","Fare un bonifico","Usare il bancomat","Risparmiare","Fare un budget","Pagare l'affitto","Comprare online","Restituire un prodotto","Incontrare un amico","Andare al bar","Fare aperitivo","Mangiare fuori","Invitare qualcuno","Festeggiare","Fare gli auguri","Portare un regalo","Fare una foto","Salutarsi","Studiare","Fare i compiti","Ripassare","Memorizzare","Prendere una lezione","Fare una domanda","Rispondere","Correggere un errore","Imparare una parola","Fare pratica","Controllare il meteo","Aprire la finestra","Accendere la luce","Chiudere la porta","Cercare le chiavi","Preparare la cena","Sistemare la cucina","Impostare la sveglia","Leggere le notizie","Programmare il giorno","Avere fretta","Essere in ritardo","Avere sonno","Avere fame","Avere sete","Essere stanco","Essere occupato","Avere tempo libero","Dimenticare qualcosa","Ricordarsi di qualcosa"],"WorkLife":["Colloquio di lavoro","Curriculum","Lettera di presentazione","Candidato","Assunzione","Contratto","Periodo di prova","Stipendio","Benefit","Promozione","Capo","Responsabile","Direttore","Collega","Cliente","Fornitore","Tecnico","Ingegnere","Operatore","Commerciale","Ufficio","Fabbrica","Officina","Magazzino","Reparto","Sala riunioni","Scrivania","Postazione","Stabilimento","Sede","Riunione","Agenda","Verbale","Presentazione","Videoconferenza","Invito","Partecipante","Ordine del giorno","Decisione","Azione","Progetto","Obiettivo","Scadenza","Priorità","Risorsa","Budget","Piano","Rischio","Problema","Soluzione","Qualità","Controllo qualità","Ispezione","Difetto","Standard","Procedura","Istruzione di lavoro","Audit","Conformità","Miglioramento continuo","Produzione","Assemblaggio","Montaggio","Cablaggio","Collaudo","Imballaggio","Spedizione","Inventario","Ordine","Consegna","Disegno tecnico","Schema elettrico","Specifiche","Revisione","Approvazione","Documento","Versione","Modifica","Nota tecnica","Distinta base","Preventivo","Offerta commerciale","Costo","Prezzo","Margine","Sconto","Ordine di acquisto","Fattura","Pagamento","Negoziazione","Contratto quadro","Vendita","Prospect","Opportunità","Pipeline","Proposta","Obiezione","Follow-up","Chiusura","Relazione cliente","Servizio","Email professionale","Telefonata","Messaggio","Risposta","Allegato","Firma","Destinatario","Copia conoscenza","Oggetto","Calendario","Formazione","Corso","Certificazione","Competenza","Esperienza","Mentore","Apprendista","Valutazione","Feedback","Sviluppo professionale","Turno","Straordinario","Ferie","Permesso","Malattia","Pausa pranzo","Orario flessibile","Lavoro remoto","Trasferta","Timbratura","Sicurezza sul lavoro","DPI","Casco","Occhiali protettivi","Guanti","Pericolo","Incidente","Segnalazione","Emergenza","Prevenzione","Leadership","Delega","Collaborazione","Responsabilità","Comunicazione","Conflitto","Motivazione","Prestazione","Risultato","Strategia","Pianificazione","Capacità produttiva","Tempi di consegna","Carico di lavoro","Produttività","Efficienza","KPI","Rapporto mensile","Previsione","Consuntivo","Acquisti","Logistica","Catena di fornitura","Materia prima","Componente","Manutenzione","Fermo macchina","Avviamento","Commissioning","Supporto tecnico","Riunione individuale","Piano di carriera","Obiettivo annuale","Valutazione annuale","Responsabile di progetto","Caposquadra","Reclamo cliente","Garanzia","Reso","Tracciabilità"],"Sicily":["Palermo","Catania","Messina","Siracusa","Ragusa","Trapani","Agrigento","Enna","Caltanissetta","Cefalù","Taormina","Noto","Modica","Scicli","Erice","Marsala","Mazara del Vallo","Castellammare del Golfo","Sciacca","Milazzo","Etna","Stromboli","Vulcano","Eolie","Egadi","Pantelleria","Lampedusa","Ustica","Nebrodi","Madonie","Valle dei Templi","Teatro greco","Ortigia","Cattedrale di Palermo","Monreale","Cappella Palatina","Scala dei Turchi","Riserva dello Zingaro","Gole dell'Alcantara","Villa del Casale","Arancina","Cannolo siciliano","Cassata siciliana","Granita","Brioche col tuppo","Pasta alla Norma","Pasta con le sarde","Caponata","Panelle","Sfincione","Busiate","Cous cous trapanese","Sarde a beccafico","Involtini di pesce spada","Pesce spada","Gambero rosso","Pistacchio di Bronte","Cioccolato di Modica","Mandorla di Avola","Arancia rossa","Nero d'Avola","Marsala vino","Etna Rosso","Malvasia","Zibibbo","Limoncello siciliano","Amaro Averna","Olio siciliano","Sale di Trapani","Cappero di Pantelleria","Barocco siciliano","Mosaico normanno","Tempio greco","Teatro antico","Palazzo nobiliare","Baglio","Tonnara","Castello","Duomo","Chiostro","Normanni","Arabi in Sicilia","Greci in Sicilia","Romani in Sicilia","Borboni","Regno delle Due Sicilie","Magna Grecia","Sicilia araba","Sicilia normanna","Garibaldi","Dialetto siciliano","Pupi siciliani","Opera dei Pupi","Carretto siciliano","Ceramica di Caltagirone","Marranzano","Coppola siciliana","Festa di Santa Rosalia","Sant'Agata","Infiorata di Noto","Scilla","Tropea","Reggio Calabria","Catanzaro","Cosenza","Crotone","Pizzo","Gerace","Stilo","Soverato","'Nduja","Tartufo di Pizzo","Cipolla di Tropea","Fileja","Soppressata calabrese","Bergamotto","Liquirizia calabrese","Peperoncino calabrese","Patata della Sila","Caciocavallo silano","Matera","Bari","Lecce","Ostuni","Alberobello","Taranto","Otranto","Gallipoli","Polignano a Mare","Monopoli","Sassi di Matera","Trulli di Alberobello","Salento","Gargano","Valle d'Itria","Murgia","Costa degli Dei","Aspromonte","Sila","Stretto di Messina","Tramonto sul mare","Spiaggia siciliana","Acqua cristallina","Mercato di Ballarò","Mercato della Vucciria","Pescheria di Catania","Passeggiata sul lungomare","Porto di Palermo","Campagna siciliana","Agrumeto","Aci Trezza","Acireale","Castelmola","Piazza Armerina","Palazzolo Acreide","Marzamemi","San Vito Lo Capo","Favignana","Levanzo","Marettimo","Riserva di Vendicari","Isola delle Correnti","Capo Passero","Tindari","Cava d'Ispica","Necropoli di Pantalica","Selinunte","Segesta","Mozia","Zingaro","Sila Grande","Capo Vaticano","Chianalea","Le Castella","Roccella Ionica","Locri","Serra San Bruno","Diamante","Scalea","Praia a Mare"],"B1Conversation":["Secondo me","A mio parere","Dal mio punto di vista","Per quanto mi riguarda","Sono d'accordo","Non sono d'accordo","Dipende","Non ne sono sicuro","Hai ragione","Non proprio","Penso che","Credo che","Mi sembra che","Immagino che","Suppongo che","Spero che","Dubito che","Sono convinto che","Mi preoccupa che","È possibile che","Prima di tutto","In secondo luogo","Inoltre","Per esempio","Infatti","Tuttavia","Comunque","Quindi","Perciò","In conclusione","Da una parte","Dall'altra parte","Nonostante questo","Anche se","Mentre","Invece","Piuttosto che","A differenza di","Allo stesso modo","In generale","Mi piace","Non mi piace","Preferisco","Mi interessa","Mi annoia","Mi diverte","Mi sorprende","Mi dà fastidio","Mi rende felice","Mi preoccupa","Sono riuscito a","Sto cercando di","Ho deciso di","Ho bisogno di","Ho voglia di","Non vedo l'ora di","Mi sono abituato a","Continuo a","Ho smesso di","Vale la pena","L'ultima volta che","Quando ero piccolo","Qualche anno fa","Da quando","Fino a quando","Mentre stavo","Appena ho","Dopo aver","Prima di partire","Alla fine","Se avessi tempo","Se potessi","Se fossi in te","Vorrei che","Mi piacerebbe","Sarebbe meglio","Potremmo","Dovremmo","Bisognerebbe","Preferirei","Cosa ne pensi?","Sei mai stato?","Ti è mai successo?","Come mai?","In che senso?","Puoi spiegare?","Cosa intendi?","Sei d'accordo?","Cosa faresti?","Qual è la tua opinione?","Non ho capito","Puoi ripetere?","Più lentamente","Come si dice?","Cosa significa?","Come si pronuncia?","Puoi fare un esempio?","Ho dimenticato la parola","Fammi pensare","Non so come dirlo","Per essere sincero","A dire la verità","In realtà","Praticamente","Probabilmente","Sicuramente","Fortunatamente","Purtroppo","Stranamente","Personalmente","Lavoro ideale","Vita all'estero","Viaggio perfetto","Abitudine quotidiana","Obiettivo personale","Ricordo d'infanzia","Persona importante","Decisione difficile","Sfida recente","Successo personale","Tempo libero","Tecnologia","Social media","Sport","Famiglia","Amicizia","Lavoro","Studio","Salute","Viaggi","Ambiente","Educazione","Trasporti","Turismo","Cibo","Tradizioni","Musica","Cinema","Libri","Lingue","Vantaggio","Svantaggio","Conseguenza","Esperienza","Cambiamento","Possibilità","Responsabilità","Scelta","Motivazione","Progresso"],"Hobbies":["Leggere romanzi","Leggere fumetti","Scrivere","Tenere un diario","Disegnare","Dipingere","Fotografare","Fare video","Montare video","Collezionare","Suonare la chitarra","Suonare il pianoforte","Cantare","Ascoltare musica","Andare ai concerti","Comporre musica","Ballare","Fare karaoke","Suonare la batteria","Imparare uno strumento","Giocare a calcio","Giocare a basket","Giocare a pallavolo","Giocare a tennis","Giocare a golf","Andare in bicicletta","Correre","Nuotare","Fare yoga","Sollevare pesi","Fare trekking","Campeggiare","Pescare","Andare in barca","Fare kayak","Sciare","Fare snowboard","Arrampicare","Osservare gli uccelli","Fare picnic","Cucinare","Fare dolci","Fare il pane","Provare ricette","Bere caffè","Degustare vino","Visitare ristoranti","Fare barbecue","Coltivare erbe","Preparare la pizza","Viaggiare","Visitare musei","Esplorare città","Andare in spiaggia","Fare gite","Visitare borghi","Imparare lingue","Conoscere culture","Fare fotografie di viaggio","Pianificare itinerari","Guardare film","Guardare serie TV","Andare al cinema","Seguire documentari","Guardare sport","Giocare ai videogiochi","Fare puzzle","Giocare a scacchi","Giocare a carte","Fare giochi da tavolo","Giardinaggio","Coltivare fiori","Curare piante","Lavorare il legno","Fare bricolage","Restaurare mobili","Cucire","Lavorare a maglia","Fare ceramica","Costruire modellini","Collezionare monete","Collezionare francobolli","Collezionare libri","Collezionare dischi","Collezionare carte","Collezionare souvenir","Collezionare fotografie","Collezionare magliette","Collezionare scarpe","Collezionare orologi","Fare volontariato","Allenare una squadra","Partecipare a un club","Frequentare un corso","Studiare storia","Studiare geografia","Imparare a programmare","Seguire podcast","Ascoltare audiolibri","Fare conversazione","Portare a spasso il cane","Giocare con il cane","Addestrare un animale","Visitare lo zoo","Andare a cavallo","Curare un acquario","Osservare le stelle","Fare astronomia","Guardare il tramonto","Camminare nella natura","Fare meditazione","Respirazione","Scrivere obiettivi","Pianificare la settimana","Leggere libri di crescita","Seguire una routine","Fare stretching","Fare una sauna","Riposarsi","Fare una passeggiata serale","Seguire la Formula 1","Seguire il ciclismo","Seguire il tennis","Seguire il basket italiano","Seguire la Serie A","Partecipare a una gara","Allenarsi per una corsa","Giocare a bocce","Fare ping pong","Giocare a biliardo","Andare al teatro","Vedere un'opera","Visitare una mostra","Andare a un festival","Ascoltare musica dal vivo","Fare improvvisazione","Recitare","Scrivere poesie","Leggere poesia","Studiare arte","Cercare ricette online","Guardare tutorial","Creare un blog","Creare un sito web","Fare un podcast","Modificare fotografie","Usare i social media","Imparare tecnologia","Stampare in 3D","Fare elettronica"],"Verbs":["accorgersi","ammettere","apparire","appartenere","approfittare","arrendersi","aspettarsi","assomigliare","avvisare","bastare","cambiare idea","capitare","chiedersi","convincere","correggere","decidere","descrivere","dimenticarsi","dimostrare","dipendere","discutere","evitare","fidarsi","fingere","funzionare","gestire","immaginare","impedire","incontrarsi","insistere","lamentarsi","meritare","migliorare","notare","ottenere","permettere","preoccuparsi","prepararsi","proporre","proteggere","raccontare","rendersi conto","risolvere","riuscire","scegliere","scoprire","sembrare","smettere","sperare","suggerire","tenere","tentare","trascorrere","trovare","utilizzare","valere","verificare","vivere","volerci","servire","andarsene","cavarsela","farcela","metterci","sentirsela","prendersela","godersela","sbrigarsi","rilassarsi","divertirsi","avere bisogno di","avere voglia di","avere paura di","avere fretta","avere ragione","avere torto","avere senso","avere a che fare con","avere intenzione di","avere l'abitudine di","fare attenzione","fare finta","fare caso","fare una scelta","fare progressi","fare un tentativo","fare una pausa","fare del proprio meglio","fare parte di","fare in tempo","dare una mano","dare fastidio","dare un consiglio","dare importanza","dare un'occhiata","dare per scontato","dare ragione","dare torto","dare un esempio","dare una risposta","prendere una decisione","prendere tempo","prendere appunti","prendere sul serio","prendere in giro","prendere parte","prendere l'iniziativa","prendere una pausa","prendere una strada","prendere un impegno","mettere in ordine","mettere da parte","mettere in dubbio","mettere in pratica","mettere a posto","mettere in evidenza","mettere d'accordo","mettere fretta","mettere alla prova","mettere in contatto","tenere conto","tenere presente","tenere d'occhio","tenere in mente","tenere il passo","tenere una promessa","tenere un segreto","tenere duro","tenere compagnia","tenere occupato","portare avanti","portare fortuna","portare pazienza","portare rispetto","portare a termine","portare con sé","portare un esempio","portare un cambiamento","portare beneficio","portare conseguenze","venire in mente","venire a sapere","venire voglia","venire bene","venire male","andare d'accordo","andare avanti","andare bene","andare storto","andare di fretta"],"Idioms":["in bocca al lupo","crepi il lupo","acqua in bocca","essere al verde","avere le mani bucate","costare un occhio della testa","fare il passo più lungo della gamba","tirare la cinghia","navigare nell'oro","fare i conti senza l'oste","rompere il ghiaccio","tagliare corto","andare al sodo","girare intorno al problema","mettere i puntini sulle i","parlare a vanvera","non avere peli sulla lingua","tenere la bocca chiusa","vuotare il sacco","passare parola","essere in gamba","avere la testa sulle spalle","perdere la testa","avere la testa fra le nuvole","mettersi in testa","rompersi la testa","alzare la testa","chinare la testa","testa o croce","fare di testa propria","dare una mano","lavarsene le mani","avere le mani legate","mettere le mani avanti","essere in buone mani","prendere in mano la situazione","stare con le mani in mano","mettere la mano sul fuoco","avere le mani d'oro","mangiarsi le mani","avere un cuore d'oro","spezzare il cuore","mettersi il cuore in pace","stare a cuore","avere il cuore in gola","parlare col cuore","senza cuore","cuore di pietra","andare al cuore","di cuore","chiudere un occhio","tenere d'occhio","saltare agli occhi","avere gli occhi più grandi della pancia","costare un occhio","non credere ai propri occhi","aprire gli occhi","vedere di buon occhio","lontano dagli occhi lontano dal cuore","avere occhio","essere alle prime armi","gettare la spugna","tenere duro","essere sul pezzo","dare il massimo","fare centro","fare squadra","mettersi in gioco","giocare d'anticipo","partire col piede giusto","avere la luna storta","essere al settimo cielo","vedere tutto nero","essere nero dalla rabbia","diventare rosso come un peperone","essere bianco come un lenzuolo","vedere rosa","passare una notte in bianco","essere verde d'invidia","avere sangue blu","fare una figuraccia","fare bella figura","prendere un granchio","cadere dalle nuvole","essere fuori di testa","avere un diavolo per capello","fare orecchie da mercante","avere la coda di paglia","essere una mosca bianca","essere una pecora nera","non vedere l'ora","all'ultimo minuto","in quattro e quattr'otto","da un giorno all'altro","una volta ogni morte di papa","meglio tardi che mai","il tempo vola","perdere tempo","guadagnare tempo","ammazzare il tempo","piove sul bagnato","essere come il prezzemolo","cercare il pelo nell'uovo","essere buono come il pane","rendere pan per focaccia","avere sale in zucca","finire a tarallucci e vino","essere alla frutta","cadere dalla padella nella brace","non tutte le ciambelle riescono col buco","prendere due piccioni con una fava","essere un pesce fuor d'acqua","fare il pesce in barile","essere una volpe","essere testardo come un mulo","essere lento come una lumaca","dormire come un ghiro","essere solo come un cane","avere una memoria da elefante","essere muto come un pesce","andare a gonfie vele","essere in alto mare","remare contro","tirare i remi in barca","lasciare andare","cambiare rotta","perdere la bussola","essere sulla stessa barca","arrivare in porto","navigare a vista","fare fuoco e fiamme","mettere troppa carne al fuoco","gettare benzina sul fuoco","avere il fuoco dentro","essere tra due fuochi","giocare col fuoco","fumare come un turco","non c'è fumo senza arrosto","andare in fumo","mandare tutto all'aria","essere con l'acqua alla gola","fare acqua da tutte le parti","bere un bicchiere d'acqua","acqua passata","calmare le acque","muovere le acque","essere in acque tranquille","annegare in un bicchiere d'acqua","tirare acqua al proprio mulino","scoprire l'acqua calda"]};
 
-// ==============================
-// CATEGORY COUNTS
-// ==============================
-
-const categoryNames = {
-    General: "Generale",
-    ItalianCulture: "Cultura italiana",
-    ItalianFood: "Cucina italiana",
-    ItalianTravel: "Viaggi in Italia",
-    DailyLife: "Vita quotidiana",
-    WorkLife: "Lavoro e vita professionale",
-    Sicily: "Sicilia e Italia meridionale",
-    B1Conversation: "Conversazione B1",
-    Hobbies: "Passatempi",
-    Verbs: "Verbi ed espressioni",
-    Idioms: "Modi di dire ed espressioni colloquiali"
+const categoryLabels = {
+    General:"Generale",
+    ItalianCulture:"Cultura italiana",
+    ItalianFood:"Cucina italiana",
+    ItalianTravel:"Viaggi in Italia",
+    DailyLife:"Vita quotidiana",
+    WorkLife:"Lavoro e vita professionale",
+    Sicily:"Sicilia e Italia meridionale",
+    B1Conversation:"Conversazione B1",
+    Hobbies:"Passatempi",
+    Verbs:"Verbi ed espressioni",
+    Idioms:"Modi di dire ed espressioni colloquiali"
 };
 
-function updateCategoryOptions(){
-    const previousValue = categorySelect.value || "All";
-    const totalCards = Object.values(cards.easy)
-        .reduce((total, deck) => total + deck.length, 0);
+const categoryFallback = {
+    General:["persona","luogo","oggetto","azione","quotidiano","tempo","casa","usare"],
+    ItalianCulture:["Italia","tradizione","storia","arte","famoso","cultura","italiano","evento"],
+    ItalianFood:["mangiare","cucina","piatto","ingrediente","sapore","Italia","ristorante","ricetta"],
+    ItalianTravel:["viaggio","Italia","visitare","turista","luogo","andare","vacanza","vedere"],
+    DailyLife:["giorno","casa","fare","routine","tempo","persona","usare","andare"],
+    WorkLife:["lavoro","azienda","progetto","cliente","ufficio","responsabile","processo","risultato"],
+    Sicily:["Sicilia","sud","mare","tradizione","isola","Italia","storia","cibo"],
+    B1Conversation:["parlare","pensare","situazione","opinione","esperienza","dire","persona","tempo"],
+    Hobbies:["tempo libero","fare","divertimento","attività","pratica","passione","imparare","amici"],
+    Verbs:["fare","azione","persona","situazione","risultato","tempo","cosa","modo"],
+    Idioms:["espressione","modo di dire","significato","situazione","persona","figurato","italiano","parlare"]
+};
 
-    categorySelect.innerHTML = "";
-
-    const allOption = document.createElement("option");
-    allOption.value = "All";
-    allOption.textContent = `Tutti gli argomenti (${totalCards})`;
-    categorySelect.appendChild(allOption);
-
-    Object.entries(categoryNames).forEach(([key, label]) => {
-        const option = document.createElement("option");
-        option.value = key;
-        option.textContent = `${label} (${cards.easy[key].length})`;
-        categorySelect.appendChild(option);
-    });
-
-    categorySelect.value = previousValue;
+function normalizeWord(value){
+    return value.toLocaleLowerCase("it-IT").trim();
 }
 
+function buildGeneratedCard(category, target, index, targets){
+    const forbidden = [];
+    const add = value => {
+        if(!value) return;
+        const clean = value.trim();
+        if(!clean) return;
+        if(normalizeWord(clean) === normalizeWord(target)) return;
+        if(forbidden.some(x => normalizeWord(x) === normalizeWord(clean))) return;
+        forbidden.push(clean);
+    };
 
-// ==============================
-// START GAME
-// ==============================
+    // Nearby targets are deliberately used because the supplemental lists
+    // are organized into semantic clusters.
+    for(const offset of [-2,-1,1,2,3,-3]){
+        const pos = index + offset;
+        if(pos >= 0 && pos < targets.length) add(targets[pos]);
+        if(forbidden.length >= 4) break;
+    }
 
+    for(const word of categoryFallback[category]){
+        add(word);
+        if(forbidden.length >= 5) break;
+    }
 
-function startGame(){
-
-
-gameActive=true;
-
-isPaused=false;
-
-startButton.innerHTML = "⏸ Pausa";
-
-
-score=0;
-
-skips=0;
-
-
-updateScore();
-
-
-const selectedCategory =
-categorySelect.value;
-
-
-
-const selectedDeck =
-selectedCategory === "All"
-    ? Object.values(cards.easy).flat()
-    : cards.easy[selectedCategory];
-
-
-
-if(!selectedDeck || selectedDeck.length === 0){
-
-    alert("Non ci sono carte disponibili per questo argomento.");
-    gameActive = false;
-    isPaused = false;
-    startButton.innerHTML = "▶ Avvia partita";
-    return;
-
+    return {word:target, taboo:forbidden.slice(0,5)};
 }
 
+function expandDecksTo200(){
+    const deckRoot = cards.easy;
+    for(const category of Object.keys(categoryLabels)){
+        const deck = deckRoot[category] || [];
+        const seen = new Set(deck.map(card => normalizeWord(card.word)));
 
-cardsRemaining =
-shuffleCards(
-    [...selectedDeck]
-);
+        // Repair any malformed existing card quietly.
+        for(const card of deck){
+            card.taboo = Array.from(new Set((card.taboo || [])
+                .map(x => String(x).trim())
+                .filter(Boolean)
+                .filter(x => normalizeWord(x) !== normalizeWord(card.word))
+            )).slice(0,5);
+            for(const fallback of categoryFallback[category]){
+                if(card.taboo.length >= 5) break;
+                if(normalizeWord(fallback) !== normalizeWord(card.word) &&
+                   !card.taboo.some(x => normalizeWord(x) === normalizeWord(fallback))){
+                    card.taboo.push(fallback);
+                }
+            }
+        }
 
+        const targets = supplementalTargets[category] || [];
+        for(let i=0; i<targets.length && deck.length<200; i++){
+            const target = targets[i];
+            const key = normalizeWord(target);
+            if(seen.has(key)) continue;
+            deck.push(buildGeneratedCard(category,target,i,targets));
+            seen.add(key);
+        }
 
-
-timeRemaining =
-Number(timeSelect.value);
-
-
-
-timerDisplay.innerHTML =
-timeRemaining;
-
-
-
-nextCard();
-
-
-
+        // Safety fallback: should never be needed, but keeps the count exact.
+        let n = 1;
+        while(deck.length < 200){
+            const target = `${categoryLabels[category]} ${n}`;
+            if(!seen.has(normalizeWord(target))){
+                deck.push(buildGeneratedCard(category,target,0,targets));
+                seen.add(normalizeWord(target));
+            }
+            n++;
+        }
+        if(deck.length > 200) deck.length = 200;
+    }
 }
 
+expandDecksTo200();
 
+const scoreDisplay = document.getElementById("score");
+const skipsDisplay = document.getElementById("skips");
+const remainingDisplay = document.getElementById("remaining");
+const timerDisplay = document.getElementById("timer");
+const wordDisplay = document.getElementById("word");
+const tabooDisplay = document.getElementById("tabooList");
+const categorySelect = document.getElementById("categorySelect");
+const timeSelect = document.getElementById("timeLimit");
+const startButton = document.getElementById("startGame");
+const correctButton = document.getElementById("correctBtn");
+const skipButton = document.getElementById("skipBtn");
+const restartButton = document.getElementById("restartBtn");
+const categoryBadge = document.getElementById("categoryBadge");
+const roundText = document.getElementById("roundText");
+const resultBox = document.getElementById("resultBox");
 
-
-// ==============================
-// RANDOM CARD SHUFFLE
-// ==============================
-
+let gameActive = false;
+let isPaused = false;
+let cardsRemaining = [];
+let score = 0;
+let skips = 0;
+let timeRemaining = 60;
+let timerInterval = null;
+let selectedLabel = "Tutti gli argomenti";
+let playedThisRound = 0;
 
 function shuffleCards(array){
-
-
-return array.sort(
-()=>Math.random()-0.5
-);
-
-
+    const copy = [...array];
+    for(let i=copy.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        [copy[i],copy[j]]=[copy[j],copy[i]];
+    }
+    return copy;
 }
 
-
-
-
-// ==============================
-// LOAD NEXT CARD
-// ==============================
-
-
-function nextCard(){
-
-
-if(cardsRemaining.length===0){
-
-
-endGame();
-
-return;
-
-
+function allCards(){
+    return Object.values(cards.easy).flat();
 }
 
+function updateCategoryOptions(){
+    categorySelect.innerHTML = "";
+    const total = allCards().length;
+    const allOption = document.createElement("option");
+    allOption.value = "All";
+    allOption.textContent = `Tutti gli argomenti — ${total} carte`;
+    categorySelect.appendChild(allOption);
 
-
-currentCard =
-cardsRemaining.pop();
-
-
-
-displayCard();
-
-
-updateRemaining();
-
-
-
+    for(const [key,label] of Object.entries(categoryLabels)){
+        const option = document.createElement("option");
+        option.value = key;
+        option.textContent = `${label} — ${cards.easy[key].length} carte`;
+        categorySelect.appendChild(option);
+    }
 }
 
-
-
-// ==============================
-// DISPLAY CARD
-// ==============================
-
-
-function displayCard(){
-
-
-wordDisplay.innerHTML =
-currentCard.word;
-
-
-
-tabooDisplay.innerHTML="";
-
-
-
-currentCard.taboo.forEach(
-word=>{
-
-
-let item =
-document.createElement("li");
-
-
-item.innerHTML =
-word;
-
-
-tabooDisplay.appendChild(item);
-
-
-
-});
-
-
+function updateStats(){
+    scoreDisplay.textContent = score;
+    skipsDisplay.textContent = skips;
+    remainingDisplay.textContent = gameActive ? cardsRemaining.length : "--";
+    timerDisplay.textContent = timeRemaining;
+    const attempted = score + skips;
+    const accuracy = attempted ? Math.round(score / attempted * 100) : 0;
+    roundText.textContent = gameActive
+        ? `${playedThisRound} giocate • ${accuracy}% corrette`
+        : "Pronto?";
 }
 
-
-
-// ==============================
-// UPDATE REMAINING
-// ==============================
-
-
-function updateRemaining(){
-
-
-remainingDisplay.innerHTML =
-cardsRemaining.length;
-
-
+function setActionButtons(enabled){
+    correctButton.disabled = !enabled;
+    skipButton.disabled = !enabled;
 }
 
-// ==============================
-// SCORE MANAGEMENT
-// ==============================
-
-
-function updateScore(){
-
-scoreDisplay.innerHTML = score;
-
-skipsDisplay.innerHTML = skips;
-
+function showCard(){
+    if(!cardsRemaining.length){
+        endGame("Hai completato tutte le carte!");
+        return;
+    }
+    const card = cardsRemaining.pop();
+    wordDisplay.textContent = card.word;
+    tabooDisplay.innerHTML = "";
+    card.taboo.slice(0,5).forEach(item => {
+        const li=document.createElement("li");
+        li.textContent=item;
+        tabooDisplay.appendChild(li);
+    });
+    remainingDisplay.textContent = cardsRemaining.length;
 }
 
+function startGame(){
+    score=0;
+    skips=0;
+    playedThisRound=0;
+    timeRemaining=Number(timeSelect.value);
+    isPaused=false;
+    gameActive=true;
+    resultBox.classList.remove("show");
+    resultBox.innerHTML="";
 
+    const selected=categorySelect.value;
+    let playableCards;
+    if(selected==="All"){
+        playableCards=allCards();
+        selectedLabel="Tutti gli argomenti";
+    }else{
+        playableCards=cards.easy[selected] || [];
+        selectedLabel=categoryLabels[selected] || selected;
+    }
 
-
-// ==============================
-// CORRECT ANSWER
-// ==============================
-
-
-function correctAnswer(){
-
-
-if(!gameActive || isPaused){
-
-return;
-
+    cardsRemaining=shuffleCards(playableCards);
+    categoryBadge.textContent=`${selectedLabel} • ${playableCards.length} carte`;
+    startButton.textContent="⏸ Pausa";
+    categorySelect.disabled=true;
+    timeSelect.disabled=true;
+    setActionButtons(true);
+    updateStats();
+    showCard();
+    clearInterval(timerInterval);
+    timerInterval=setInterval(()=>{
+        if(!gameActive || isPaused) return;
+        timeRemaining--;
+        updateStats();
+        if(timeRemaining<=0) endGame("Tempo scaduto!");
+    },1000);
 }
-
-
-score++;
-
-
-updateScore();
-
-
-nextCard();
-
-
-}
-
-
-
-
-// ==============================
-// SKIP CARD
-// ==============================
-
-
-function skipCard(){
-
-
-if(!gameActive || isPaused){
-
-return;
-
-}
-
-
-skips++;
-
-
-updateScore();
-
-
-nextCard();
-
-
-}
-
-
-
-
-// ==============================
-// TIMER SYSTEM
-// ==============================
-
-
-function startTimer(){
-
-
-clearInterval(timerInterval);
-
-
-
-timerInterval =
-setInterval(()=>{
-
-
-if(!gameActive || isPaused){
-
-return;
-
-}
-
-
-
-timeRemaining--;
-
-
-
-timerDisplay.innerHTML =
-timeRemaining;
-
-
-
-if(timeRemaining <= 0){
-
-
-endGame();
-
-
-}
-
-
-
-},1000);
-
-
-
-}
-
-
-
-// ==============================
-// END GAME
-// ==============================
-
-
-function endGame(){
-
-
-gameActive=false;
-
-isPaused=false;
-
-startButton.innerHTML = "▶ Avvia partita";
-
-
-
-clearInterval(timerInterval);
-
-
-
-wordDisplay.innerHTML =
-"Fine del gioco! 🇮🇹";
-
-
-
-tabooDisplay.innerHTML="";
-
-
-
-let finalMessage =
-document.createElement("li");
-
-
-
-finalMessage.innerHTML =
-"Risultato: " + score + " punti";
-
-
-
-tabooDisplay.appendChild(finalMessage);
-
-
-
-}
-
-
-
-
-// ==============================
-// RESET GAME
-// ==============================
-
-
-function resetGame(){
-
-
-gameActive=false;
-
-isPaused=false;
-
-startButton.innerHTML = "▶ Avvia partita";
-
-
-clearInterval(timerInterval);
-
-
-
-score=0;
-
-skips=0;
-
-
-
-updateScore();
-
-
-
-wordDisplay.innerHTML =
-"Premi Avvia partita";
-
-
-
-tabooDisplay.innerHTML="";
-
-
-remainingDisplay.innerHTML =
-"--";
-
-
-
-timerDisplay.innerHTML =
-timeSelect.value;
-
-
-
-}
-
-
-
-
-// ==============================
-// PAUSE / RESUME
-// ==============================
 
 function togglePause(){
-
-if(!gameActive){
-    return;
+    if(!gameActive) return;
+    isPaused=!isPaused;
+    startButton.textContent=isPaused ? "▶ Riprendi" : "⏸ Pausa";
+    setActionButtons(!isPaused);
+    roundText.textContent=isPaused ? "Partita in pausa" : roundText.textContent;
 }
 
-isPaused = !isPaused;
-
-if(isPaused){
-    startButton.innerHTML = "▶ Riprendi";
-}else{
-    startButton.innerHTML = "⏸ Pausa";
+function correctAnswer(){
+    if(!gameActive || isPaused) return;
+    score++;
+    playedThisRound++;
+    updateStats();
+    showCard();
 }
 
+function skipCard(){
+    if(!gameActive || isPaused) return;
+    skips++;
+    playedThisRound++;
+    updateStats();
+    showCard();
 }
 
+function endGame(message="Fine della partita!"){
+    if(!gameActive && timeRemaining!==0) return;
+    gameActive=false;
+    isPaused=false;
+    clearInterval(timerInterval);
+    timerInterval=null;
+    startButton.textContent="▶ Avvia partita";
+    categorySelect.disabled=false;
+    timeSelect.disabled=false;
+    setActionButtons(false);
+    timeRemaining=Math.max(0,timeRemaining);
+    updateStats();
 
-// ==============================
-// BUTTON EVENTS
-// ==============================
+    const attempted=score+skips;
+    const accuracy=attempted ? Math.round(score/attempted*100) : 0;
+    wordDisplay.textContent=message;
+    tabooDisplay.innerHTML="";
+    const summary=document.createElement("li");
+    summary.textContent=`${score} corrette • ${skips} saltate • ${accuracy}% corrette`;
+    tabooDisplay.appendChild(summary);
 
+    resultBox.innerHTML=`<strong>Risultato:</strong> ${score} corrette su ${attempted} carte giocate (${accuracy}%).`;
+    resultBox.classList.add("show");
+    roundText.textContent=`${attempted} carte giocate`;
+}
 
-startButton.addEventListener(
-"click",
-()=>{
+function resetGame(){
+    gameActive=false;
+    isPaused=false;
+    clearInterval(timerInterval);
+    timerInterval=null;
+    score=0;
+    skips=0;
+    playedThisRound=0;
+    timeRemaining=Number(timeSelect.value);
+    startButton.textContent="▶ Avvia partita";
+    categorySelect.disabled=false;
+    timeSelect.disabled=false;
+    setActionButtons(false);
+    remainingDisplay.textContent="--";
+    timerDisplay.textContent=timeRemaining;
+    scoreDisplay.textContent="0";
+    skipsDisplay.textContent="0";
+    categoryBadge.textContent="Scegli un argomento";
+    roundText.textContent="Pronto?";
+    resultBox.classList.remove("show");
+    resultBox.innerHTML="";
+    wordDisplay.textContent="Pronto?";
+    tabooDisplay.innerHTML=`
+        <li>Scegli un argomento</li>
+        <li>Scegli la durata</li>
+        <li>Premi «Avvia partita»</li>
+        <li>Parla solo in italiano</li>
+        <li>Fai indovinare la parola</li>`;
+}
 
-if(!gameActive){
-    startGame();
-
-    if(gameActive){
-        startTimer();
+startButton.addEventListener("click",()=>{
+    if(!gameActive) startGame();
+    else togglePause();
+});
+correctButton.addEventListener("click",correctAnswer);
+skipButton.addEventListener("click",skipCard);
+restartButton.addEventListener("click",resetGame);
+timeSelect.addEventListener("change",()=>{
+    if(!gameActive){
+        timeRemaining=Number(timeSelect.value);
+        timerDisplay.textContent=timeRemaining;
     }
-}else{
-    togglePause();
-}
-
 });
-
-
-
-correctButton.addEventListener(
-"click",
-()=>{
-
-
-correctAnswer();
-
-
+categorySelect.addEventListener("change",()=>{
+    if(!gameActive){
+        const selected=categorySelect.value;
+        categoryBadge.textContent=selected==="All"
+            ? `Tutti gli argomenti • ${allCards().length} carte`
+            : `${categoryLabels[selected]} • ${cards.easy[selected].length} carte`;
+    }
 });
-
-
-
-skipButton.addEventListener(
-"click",
-()=>{
-
-
-skipCard();
-
-
-});
-
-
-
-restartButton.addEventListener(
-"click",
-()=>{
-
-
-resetGame();
-
-
-});
-
-
-
-
-// ==============================
-// INITIAL SCREEN SETUP
-// ==============================
-
 
 updateCategoryOptions();
-
-updateScore();
-
-timerDisplay.innerHTML =
-timeSelect.value;
+resetGame();
 
 </script>
-
 </body>
 </html>
